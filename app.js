@@ -29,17 +29,19 @@ const server = http.createServer((req, res) => {
 			console.log('chunk', chunk);
 			body.push(chunk);
 		});
-		req.on('end', () => {
+		return req.on('end', () => {
 			const parsedBody = Buffer.concat(body).toString(); // used strignbecause we know that we are receiving a string.
 
 			console.log('pasedBody', parsedBody);
 
 			const message = parsedBody.split('=')[1];
-			fs.writeFileSync('message.txt', message);
+			// fs.writeFileSync('message.txt', message);
+			fs.writeFile('message.txt', message, (err) => {
+				res.statusCode = 302;
+				res.setHeader('Location', '/');
+				return res.end();		
+			});
 		});
-		res.statusCode = 302;
-		res.setHeader('Location', '/');
-		return res.end();
 		// res.writeHead(302, {});
 	}
 
