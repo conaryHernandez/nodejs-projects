@@ -1,16 +1,19 @@
 const http = require('http');
 
-const routes = require('./routes');
+const express = require('express');
 
-// request listener, it will excute in each request
-const server = http.createServer(routes);
+const app = express();
+
+app.use((req, res, next) => {
+	console.log('im a middleware');
+	next(); // allow the request to continue in the next middleware
+});
+
+app.use((req, res, next) => {
+	console.log('im a middleware 2');
+	res.send('<h1>Hello from express</h1>')
+});
+
+const server = http.createServer(app);
 
 server.listen(3000);
-
-/* Creating Server - 1 Example 
-function rqListener (req, res) {
-	// body... 
-}
-
-http.createServer(rqListener);
-*/
