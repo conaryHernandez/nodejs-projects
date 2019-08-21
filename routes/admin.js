@@ -1,10 +1,14 @@
+const path = require('path');
+
 const express = require('express');
+
+const rootDir = require('../utils/path');
 
 const router = express.Router();
 
 router.get('/add-product', (req, res, next) => {
 	console.log('im a middleware 2');
-	res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add</button></form>')
+	res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 });
 
 // limiting just to post request
