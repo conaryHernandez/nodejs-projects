@@ -3,7 +3,11 @@ const bodyParse = require('body-parser');
 const express = require('express');
 
 const app = express();
-const adminRoutes = require('./routes/admin');
+
+app.set('view engine', 'pug'); // setting global configuration, doesnt work for all template engine
+app.set('views', 'views');
+
+const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 // parsing the body
@@ -12,7 +16,7 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParse.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', adminRoutes);
+app.use('/admin', adminData.routes);
 
 app.use(shopRoutes);
 
