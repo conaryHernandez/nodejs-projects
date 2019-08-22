@@ -10,6 +10,7 @@ const shopRoutes = require('./routes/shop');
 // Urlencoded in the end call next but before that it parses the body
 // does not parse all type of bodies
 app.use(bodyParse.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', adminRoutes);
 
