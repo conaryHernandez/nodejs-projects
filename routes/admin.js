@@ -14,7 +14,7 @@ router.get('/add-product', (req, res, next) => {
 // limiting just to post request
 // use works with all https method
 // post, get and put are a few of them
-router.post('/product', (req, res, next) => {
+router.post('/add-product', (req, res, next) => {
 	console.log(req.body); // request do not parse body
 	res.redirect('/');
 });
