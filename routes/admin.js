@@ -11,7 +11,12 @@ const products = [];
 router.get('/add-product', (req, res, next) => {
 	console.log('im a middleware 2');
 	// res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-	res.render('add-product', {pageTitle: 'Add Product', path: '/admin/add-product'});
+	res.render('add-product', {
+		pageTitle: 'Add Product',
+		path: '/admin/add-product',
+		pageStyles: ['forms', 'product'],
+		activeAddProduct: true
+	});
 });
 
 router.post('/add-product', (req, res, next) => {
