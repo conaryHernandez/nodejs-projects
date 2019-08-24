@@ -3,7 +3,7 @@ const Product = require('../models/product');
 exports.getAddProduct = (req, res, next) => {
 	console.log('im a middleware 2');
 	// res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-	res.render('add-product', {
+	res.render('admin/add-product', {
 		pageTitle: 'Add Product',
 		path: '/admin/add-product',
 		pageStyles: ['forms', 'product'],
@@ -24,12 +24,12 @@ exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
     Product.fetchAll(products => {
-        res.render('shop', {
+        res.render('admin/products-list', {
             prods: products,
-            pageTitle: 'Shop',
-            path: '/',
+            pageTitle: 'Admin Products',
+            path: '/admin/products',
             hasProducts: products.length > 0,
-            activeShop: true,
+            activeAdminProduct: true,
         }); // express method
     });
 };
