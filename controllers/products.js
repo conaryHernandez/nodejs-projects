@@ -22,12 +22,14 @@ exports.postAddProducts = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    const products = Product.fetchAll(); // class because "static" method
-	res.render('shop', {
-		prods: products,
-		pageTitle: 'Shop',
-		path: '/',
-		hasProducts: products.length > 0,
-		activeShop: true,
-	}); // express method
+    // class because "static" method
+    Product.fetchAll(products => {
+        res.render('shop', {
+            prods: products,
+            pageTitle: 'Shop',
+            path: '/',
+            hasProducts: products.length > 0,
+            activeShop: true,
+        }); // express method
+    });
 };
