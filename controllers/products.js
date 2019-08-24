@@ -1,4 +1,4 @@
-const products = [];
+const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
 	console.log('im a middleware 2');
@@ -12,13 +12,17 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProducts = (req, res, next) => {
-	console.log(req.body); // request do not parse body
-	products.push({ title: req.body.title });
+    const product = new Product(req.body.title);
+
+    console.log(req.body); // request do not parse body
+
+    product.save();
 	res.redirect('/');
 };
 
 exports.getProducts = (req, res, next) => {
-	//	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
+    //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
+    const products = Product.fetchAll(); // class because "static" method
 	res.render('shop', {
 		prods: products,
 		pageTitle: 'Shop',
