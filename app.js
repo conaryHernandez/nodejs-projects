@@ -1,14 +1,20 @@
 const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');
-const expressHbs = require('express-handlebars');
+// const expressHbs = require('express-handlebars');
 
 const app = express();
 
-// .engine is used to specify an engine that is not build in with express
-app.engine('handlebars', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main', extName: 'handlebars'})); // only use this we you have other directory name.
-app.set('view engine', 'handlebars'); // setting global configuration, doesnt work for all template engine
+app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
 app.set('views', 'views');
+
+/**
+	// .engine is used to specify an engine that is not build in with express
+	app.engine('handlebars', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main', extName: 'handlebars'})); // only use this we you have other directory name.
+	app.set('view engine', 'handlebars'); // setting global configuration, doesnt work for all template engine
+	app.set('views', 'views');
+* 
+ */
 
 /*
 	app.set('view engine', 'pug'); // setting global configuration, doesnt work for all template engine
