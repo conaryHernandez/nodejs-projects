@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-template-engine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Conary Hernandez",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "body-parser": "^1.19.0",
+    "express-handlebars": "^3.1.0",
+    "nodemon": "^1.19.1"
+  }
+}
