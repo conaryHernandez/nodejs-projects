@@ -14,6 +14,19 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
+exports.getProduct = (req, res, next) => {
+    const { productId } = req.params;
+
+    Product.findById(productId, product => {
+        res.render('shop/product-details',{
+            ...product,
+            pageTitle: product.title,
+            path: '/products',
+            activeProducts: true,
+        });
+    });    
+};
+
 exports.getIndex = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method

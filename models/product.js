@@ -25,6 +25,7 @@ module.exports = class product {
     }
 
     save() {
+        this.id = (Math.floor(Math.random() * 100) + 1).toString();
         getProductsFromFile(products => {
             products.push(this); // class context
             fs.writeFile(p, JSON.stringify(products) , (err) => {
@@ -36,5 +37,12 @@ module.exports = class product {
     // static avoid that this method will be included in the prototype chain
     static fetchAll(cb) {
         getProductsFromFile(cb);
+    }
+
+    static findById(id, cb) {
+        getProductsFromFile(products => {
+            const product = products.find(p => p.id === id);
+            cb(product);
+        });
     }
 }
