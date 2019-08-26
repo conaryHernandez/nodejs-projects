@@ -18,6 +18,7 @@
                 <div class="card__actions">
                     <a href="/admin/edit-product/{{ this.id }}/?edit=true" class="btn">Edit</a>
                     <form action="/admin/delete-product" method="POST">
+                        <input type="hidden" name="productId" value="{{ this.id }}">
                         <button class="btn" type="submit">Delete</button> 
                     </form>
                 </div>

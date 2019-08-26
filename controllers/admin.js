@@ -1,7 +1,6 @@
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
-	console.log('im a middleware 2');
 	// res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 	res.render('admin/add-product', {
 		pageTitle: 'Add Product',
@@ -14,8 +13,6 @@ exports.getAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
     const {edit} = req.query;
 
-    console.log('edit', edit);
-
     if (!edit) {
         return res.redirect('/');
     }
@@ -25,7 +22,6 @@ exports.getEditProduct = (req, res, next) => {
         if (!product) {
             return res.redirect('/');
         }
-        console.log('product', product);
         res.render('admin/edit-product', {
             pageTitle: 'Edit Product',
             path: '/admin/edit-product',
@@ -41,8 +37,6 @@ exports.postAddProducts = (req, res, next) => {
     const {title, imageUrl, description, price} = req.body;
     const product = new Product(null, title, imageUrl, description, price);
 
-    console.log(req.body); // request do not parse body
-
     product.save();
 	res.redirect('/');
 };
@@ -56,11 +50,18 @@ exports.postEditProducts = (req, res, next) => {
     res.redirect('/admin/products');
 };
 
+exports.postDeleteProducts = (req, res, next) => {
+    const { productId } =  req.body;
+
+    Product.deleteById(productId);
+
+    res.redirect('/admin/products');
+};
+
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
     Product.fetchAll(products => {
-        console.log('products', products);
         res.render('admin/products-list', {
             prods: products,
             pageTitle: 'Admin Products',
