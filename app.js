@@ -9,10 +9,22 @@ const app = express();
 * app.set('views', 'views');
 */
 
-/**HANDLEBARS ENGINE
+/** HANDLEBARS ENGINE
  * .engine is used to specify an engine that is not build in with express
 */
-app.engine('handlebars', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main', extName: 'handlebars'})); // only use this we you have other directory name.
+const hbs = expressHbs.create({
+	layoutsDir: 'views/layouts/', // only use this when you have other directory name.
+	partialsDir: 'views/partials/',
+	defaultLayout: 'main',
+	extName: 'handlebars',
+	helpers: {
+		calculation(value) {
+			return value * 5;
+		}
+	},
+});
+
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars'); // setting global configuration, doesnt work for all template engine
 app.set('views', 'views');
 
@@ -25,7 +37,7 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/404');
 
-/* parsing the body 
+/* parsing the body
 * Urlencoded in the end call next but before that it parses the body, does not parse all type of bodies
 */
 app.use(bodyParser.urlencoded({extended: false}));
