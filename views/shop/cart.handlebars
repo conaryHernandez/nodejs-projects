@@ -1,0 +1,11 @@
+<main>
+    {{#if hasProducts }}
+        <ul>
+        {{#each products}}
+            <li>{{this.productData.title}} ({{ this.qty }})</li>
+        {{/each}}
+        </ul>
+    {{else}}
+        <h1>No products in cart.</h1>
+    {{/if}}
+</main>
