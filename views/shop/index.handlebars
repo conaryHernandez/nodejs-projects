@@ -1,5 +1,9 @@
 <main>
-  <h1>Welcome to my store {{>myName name="Conary"}}</h1>
+  <h1>Welcome to my store
+    {{#>myName name="Conary"}}
+      Testing partials
+    {{/myName}}
+  </h1>
   <p>List of all the products (Aprox.{{calculation 50}})</p>
   <div class="grid">
     {{#if hasProducts }}
