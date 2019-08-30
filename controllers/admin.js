@@ -35,16 +35,19 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postAddProducts = (req, res, next) => {
     const {title, imageUrl, description, price} = req.body;
-    const product = new Product(null, title, imageUrl, description, price);
 
-    product
-        .save()
-        .then(() => {
-            res.redirect('/');            
-        })
-        .catch(err => {
-            console.log('err', err);
-        });
+    Product.create({
+        title,
+        imageUrl,
+        description,
+        price
+    })
+    .then(result => {
+        console.log('result', result);
+    })
+    .catch(err => {
+        console.log('err', err);
+    });
 };
 
 exports.postEditProducts = (req, res, next) => {

@@ -4,7 +4,7 @@ const express = require('express');
 const expressHbs = require('express-handlebars');
 
 const app = express();
-const db = require('./utils/database');
+const sequelize = require('./utils/database');
 
 /** EJS ENGINE
 * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
@@ -53,4 +53,12 @@ app.use(shopRoutes);
 /**	404 PAGE */
 app.use(errorController.get404);
 
-app.listen(3000);
+// sync with database and creates tables, acording to models, if doesnt exists
+sequelize.sync()
+	.then(result => {
+		app.listen(3000);		
+	})
+	.catch(err => {
+		console.log('err', err);
+	});
+
