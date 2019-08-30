@@ -4,42 +4,55 @@ const Cart = require('../models/cart');
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
-    Product.fetchAll(products => {
-        res.render('shop/product-list', {
-            prods: products,
-            pageTitle: 'Shop',
-            path: '/',
-            hasProducts: products.length > 0,
-            activeProducts: true,
-        }); // express method
-    });
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('shop/product-list', {
+                prods: rows,
+                pageTitle: 'Shop',
+                path: '/',
+                hasProducts: rows.length > 0,
+                activeProducts: true,
+            }); // express method
+        })
+        .catch(err => {
+            console.log('err', err);
+        });
 };
 
 exports.getProduct = (req, res, next) => {
     const { productId } = req.params;
 
-    Product.findById(productId, product => {
-        res.render('shop/product-details',{
-            ...product,
-            pageTitle: product.title,
-            path: '/products',
-            activeProducts: true,
-        });
-    });    
+    Product.findById(productId)
+        .then(([ product ]) => {
+            console.log('product', product[0].title);
+            res.render('shop/product-details', {
+                product: product[0],
+                pageTitle: product.title,
+                path: '/products',
+                activeProducts: true,
+            });
+        })
+        .catch(err => {
+            console.log('err', err);
+    });
 };
 
 exports.getIndex = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
-    Product.fetchAll(products => {
-        res.render('shop/index', {
-            prods: products,
-            pageTitle: 'Shop',
-            path: '/',
-            hasProducts: products.length > 0,
-            activeShop: true,
-        }); // express method
-    });
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('shop/index', {
+                prods: rows,
+                pageTitle: 'Shop',
+                path: '/',
+                hasProducts: rows.length > 0,
+                activeShop: true,
+            }); // express method
+        })
+        .catch(err => {
+            console.log('err', err);
+        });
 };
 
 exports.getCart = (req, res, next) => {

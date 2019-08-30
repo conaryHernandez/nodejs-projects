@@ -4,6 +4,8 @@ const express = require('express');
 const expressHbs = require('express-handlebars');
 
 const app = express();
+const db = require('./utils/database');
+
 /** EJS ENGINE
 * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
 * app.set('views', 'views');
@@ -36,6 +38,7 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/404');
+
 
 /* parsing the body
 * Urlencoded in the end call next but before that it parses the body, does not parse all type of bodies
