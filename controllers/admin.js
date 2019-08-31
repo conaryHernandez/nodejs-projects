@@ -17,6 +17,7 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
     const { productId } = req.params;
+    // req.user.getProducts()
     Product.findByPk(productId)
         .then(product => {
             // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
@@ -40,14 +41,15 @@ exports.getEditProduct = (req, res, next) => {
 exports.postAddProducts = (req, res, next) => {
     const {title, imageUrl, description, price} = req.body;
 
-    Product.create({
+    req.user.createProduct({
         title,
         imageUrl,
         description,
-        price
+        price,
     })
     .then(result => {
         console.log('result', result);
+        res.redirect('/admin/products');
     })
     .catch(err => {
         console.log('err', err);
@@ -77,14 +79,23 @@ exports.postEditProducts = (req, res, next) => {
 exports.postDeleteProducts = (req, res, next) => {
     const { productId } =  req.body;
 
-    Product.deleteById(productId);
-
-    res.redirect('/admin/products');
+    Product.findByPk(productId)
+        .then(product => {
+            return product.destroy();
+        })
+        .then(result => {
+            console.log('Product detroyed');
+            res.redirect('/admin/products');
+        })
+        .catch(err => {
+            console.log(err);
+        });
 };
 
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
+    // req.user.getProducts()
     Product.findAll()
         .then(products => {
             res.render('admin/products-list', {

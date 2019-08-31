@@ -5,6 +5,8 @@ const expressHbs = require('express-handlebars');
 
 const app = express();
 const sequelize = require('./utils/database');
+const Product = require('./models/product');
+const User = require('./models/user');
 
 /** EJS ENGINE
 * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
@@ -46,6 +48,18 @@ const errorController = require('./controllers/404');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// first to run
+app.use((req, res, next) => {
+	User.findByPk(1)
+		.then(user => {
+			req.user = user; // storing sequelize object
+			next();
+		})
+		.catch(err => {
+			console.log(err);
+		});
+});
+
 /**	ROUTES */
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -53,10 +67,25 @@ app.use(shopRoutes);
 /**	404 PAGE */
 app.use(errorController.get404);
 
-// sync with database and creates tables, acording to models, if doesnt exists
-sequelize.sync()
+/* setting relations */
+Product.belongsTo(User, {constraints: true, onDelete: 'CASCADE'});
+User.hasMany(Product);
+
+/* sync with database and creates tables, acording to models, if doesnt exists */
+sequelize.sync({ force: true })
 	.then(result => {
-		app.listen(3000);		
+		return User.findByPk(1);		
+	})
+	.then(user => {
+		if (!user) {
+			return User.create({ name: 'Conary', email: 'test@test.com' });
+		}
+
+		return user;
+	})
+	.then(user => {
+		console.log('user', user);
+		app.listen(3000);
 	})
 	.catch(err => {
 		console.log('err', err);
