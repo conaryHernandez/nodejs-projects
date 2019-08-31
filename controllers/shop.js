@@ -4,13 +4,13 @@ const Cart = require('../models/cart');
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
-    Product.fetchAll()
-        .then(([rows, fieldData]) => {
+    Product.findAll()
+        .then(products => {
             res.render('shop/product-list', {
-                prods: rows,
+                prods: products,
                 pageTitle: 'Shop',
                 path: '/',
-                hasProducts: rows.length > 0,
+                hasProducts: products.length > 0,
                 activeProducts: true,
             }); // express method
         })
@@ -22,11 +22,10 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
     const { productId } = req.params;
 
-    Product.findById(productId)
-        .then(([ product ]) => {
-            console.log('product', product[0].title);
+    Product.findByPk(productId)
+        .then(product => {
             res.render('shop/product-details', {
-                product: product[0],
+                product,
                 pageTitle: product.title,
                 path: '/products',
                 activeProducts: true,
@@ -40,13 +39,13 @@ exports.getProduct = (req, res, next) => {
 exports.getIndex = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
-    Product.fetchAll()
-        .then(([rows, fieldData]) => {
+    Product.findAll()
+        .then(products => {
             res.render('shop/index', {
-                prods: rows,
+                prods: products,
                 pageTitle: 'Shop',
                 path: '/',
-                hasProducts: rows.length > 0,
+                hasProducts: products.length > 0,
                 activeShop: true,
             }); // express method
         })
