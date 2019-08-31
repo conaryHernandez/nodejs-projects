@@ -1,3 +1,18 @@
 <div>
-    <h1>Orders</h1>
+    {{#if hasOrders }}
+        <ul>
+            {{#each orders}}
+            <li>
+                <h1>{{ this.id }}</h1>
+                <ul>
+                    {{#each this.products}}
+                    <li>{{ this.title }} ({{ this.orderItem.quantity}}) </li>
+                    {{/each}}
+                </ul>
+            </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <h1>No Orders</h1>
+    {{/if}}
 </div>
