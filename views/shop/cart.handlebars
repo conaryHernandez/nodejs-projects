@@ -1,15 +1,21 @@
 <main>
     {{#if hasProducts }}
-        <ul>
+        <ul class="cart__item-list">
         {{#each products}}
-            <li><p>{{this.title}} ({{ this.cartItem.quantity }})</p>
+            <li class="cart__item">
+                <p>{{this.title}} ({{ this.cartItem.quantity }})</p>
                 <form action="/cart-delete-product" method="POST">
                     <input type="hidden" name="productId" value="{{this.id}}">
-                    <button class="btn" type="submit">Delete</button>
+                    <button class="btn danger" type="submit">Delete</button>
                 </form>
             </li>
         {{/each}}
         </ul>
+        <div class="centered">
+            <form action="/create-order" method="POST">
+                <button class="btn">Order Now</button>
+            </form>
+        </div>
     {{else}}
         <h1>No products in cart.</h1>
     {{/if}}

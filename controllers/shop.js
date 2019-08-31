@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const Cart = require('../models/cart');
+const Order = require('../models/Order');
 
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
@@ -78,25 +78,6 @@ exports.getCart = (req, res, next) => {
         .catch(err => {
             console.log(err);
         });
-    /* Cart.getCart(cart => {
-        Product.fetchAll(products => {
-            const cartProducts = [];
-            for(product of products) {
-                const cartProductData = cart.products.find(prod => prod.id === product.id)
-                if (cartProductData) {
-                    cartProducts.push({productData: product, qty: cartProductData.qty});
-                }
-            }
-          
-            res.render('shop/cart', {
-                path: '/cart', 
-                pageTitle: 'Cart',
-                activeCart: true,
-                products: cartProducts,
-                hasProducts: cartProducts.length > 0
-            });
-        });
-    }); */
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {
@@ -162,6 +143,30 @@ exports.getOrders = (req, res, next) => {
         pageTitle: 'Orders',
         activeOrders: true,
     });
+};
+
+exports.postOrder = (req, res, next) => {
+    req.user.getCart()
+        .then(cart => {
+            return cart.getProducts();
+        })
+        .then(products => {
+            return req.user.createOrder()
+                .then(order => {
+                    return order.addProducts(
+                        products.map(product => {
+                            product.orderItem = { quantity: product.cartItem.quantity };
+
+                            return product;
+                        })
+                    );
+                })
+                .catch(err => console.log(err));
+        })
+        .then(result => {
+            res.redirect('/orders');
+        })
+        .catch(err => console.log(err));
 };
 
 exports.getCheckout = (req, res, next) => {
