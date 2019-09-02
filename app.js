@@ -4,7 +4,7 @@ const express = require('express');
 const expressHbs = require('express-handlebars');
 
 const app = express();
-const mongoConnect = require('./utils/database');
+const mongoConnect = require('./utils/database').mongoConnect;
 
 /** EJS ENGINE
 * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
@@ -67,7 +67,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(errorController.get404);
 
 
-mongoConnect((client) => {
-	console.log(client);
+mongoConnect( => {
 	app.listen(3000);
 });
