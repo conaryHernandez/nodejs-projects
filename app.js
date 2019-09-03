@@ -35,8 +35,8 @@ app.set('views', 'views');
 	app.set('views', 'views');
 */
 
-// const adminRoutes = require('./routes/admin');
-// const shopRoutes = require('./routes/shop');
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/404');
 
 
@@ -60,13 +60,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 */
 
 /**	ROUTES */
-// app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
 
 /**	404 PAGE */
 app.use(errorController.get404);
 
 
-mongoConnect( => {
+mongoConnect(() => {
 	app.listen(3000);
 });
