@@ -16,10 +16,10 @@
                         <p class="product__description">{{ this.description }}</p>
                     </div>
                     <div class="card__actions">
-                        <a href="/products/{{this.id}}" class="btn">Details</a>
+                        <a href="/products/{{this._id}}" class="btn">Details</a>
                         <form action="/cart" method="POST">
                             <button class="btn">Add to Cart</button>
-                            <input type="hidden" name="productId" value="{{ this.id }}"/>
+                            <input type="hidden" name="productId" value="{{ this._id }}"/>
                         </form>
                     </div>
                 </article>
