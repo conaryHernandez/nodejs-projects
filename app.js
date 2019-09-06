@@ -38,6 +38,7 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/404');
+const User = require('./models/user');
 
 
 /* parsing the body
@@ -47,8 +48,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // first to run
-/* app.use((req, res, next) => {
-	User.findByPk(1)
+app.use((req, res, next) => {
+	User.findUserById('5d71c6d71c9d44000074d620')
 		.then(user => {
 			req.user = user; // storing sequelize object
 			next();
@@ -56,8 +57,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 		.catch(err => {
 			console.log(err);
 		});
+	next()
 });
-*/
+
 
 /**	ROUTES */
 app.use('/admin', adminRoutes);
