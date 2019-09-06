@@ -25,9 +25,10 @@ class User {
 
         return db
             .collection('users')
-            .find({ _id: new mongodb.ObjectId(userId) })
-            .then(result => {
-                console.log('found!!!'. result);
+            .findOne({ _id: new mongodb.ObjectId(userId) })
+            .then(user => {
+                console.log('found!!!', user);
+                return user;
             })
             .catch(err => console.log(err));
     }

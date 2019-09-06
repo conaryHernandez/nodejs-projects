@@ -51,13 +51,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
 	User.findUserById('5d71c6d71c9d44000074d620')
 		.then(user => {
-			req.user = user; // storing sequelize object
+			console.log('dear user', user);
+			req.user = user;
 			next();
 		})
 		.catch(err => {
 			console.log(err);
 		});
-	next()
 });
 
 
