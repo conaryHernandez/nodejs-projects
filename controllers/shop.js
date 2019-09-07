@@ -59,21 +59,14 @@ exports.getCart = (req, res, next) => {
 
     req.user
         .getCart()
-        .then(cart => {
-            console.log('cart', cart);
-            return cart.getProducts()
-                .then(products => {
-                    res.render('shop/cart', {
-                        path: '/cart', 
-                        pageTitle: 'Cart',
-                        activeCart: true,
-                        products,
-                        hasProducts: products.length > 0
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+        .then(products => {
+            res.render('shop/cart', {
+                path: '/cart', 
+                pageTitle: 'Cart',
+                activeCart: true,
+                products,
+                hasProducts: products.length > 0
+            });
         })
         .catch(err => {
             console.log(err);
@@ -108,6 +101,7 @@ exports.postCart = (req, res, next) => {
         })
         .then(result => {
             console.log('add to cart result', result);
+            res.redirect('/cart');
         });
 };
 
