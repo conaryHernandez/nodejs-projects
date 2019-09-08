@@ -97,7 +97,10 @@ exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
     // req.user.getProducts()
-    Product.find()
+    Product
+        .find()
+        // .select('title price -_id')
+        // .populate('UserId', 'name')
         .then(products => {
             res.render('admin/products-list', {
                 prods: products,
