@@ -48,7 +48,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // first to run
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
 	User.findUserById('5d71c6d71c9d44000074d620')
 		.then(user => {
 			console.log('dear user', user);
@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 			console.log(err);
 		});
 });
-
+*/
 
 /**	ROUTES */
 app.use('/admin', adminRoutes);
@@ -70,7 +70,7 @@ app.use(errorController.get404);
 
 
 mongoose
-	.connect('mongodb://conaryh:k9X9MpdWnfHYcqMC@cluster0-shard-00-00-nvbxl.mongodb.net:27017,cluster0-shard-00-01-nvbxl.mongodb.net:27017,cluster0-shard-00-02-nvbxl.mongodb.net:27017/nodejs-sandbox?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+	.connect('mongodb://conaryh:k9X9MpdWnfHYcqMC@cluster0-shard-00-00-nvbxl.mongodb.net:27017,cluster0-shard-00-01-nvbxl.mongodb.net:27017,cluster0-shard-00-02-nvbxl.mongodb.net:27017/nodejs-sandbox?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority', { useNewUrlParser: true })
 	.then(result => {
 		app.listen(3000);
 	})

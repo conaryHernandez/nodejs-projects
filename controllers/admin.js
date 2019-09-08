@@ -60,17 +60,24 @@ exports.postAddProducts = (req, res, next) => {
 
 exports.postEditProducts = (req, res, next) => {
     const { productId, description, imageUrl, price, title } = req.body;
-    const product = new Product(title, price, description, imageUrl, new mongodb.ObjectId(productId) )
-
-    product
-    .save()
-    .then(result => {
-        console.log('updated product!!');
-        res.redirect('/admin/products');
-    })
-    .catch(err => {
-        console.log(err);
-    });
+    
+    Product
+        .findById(productId)
+        .then(product => {
+            product.title = title;
+            product.description = description;
+            product.imageUrl = imageUrl;
+            product.price = price;
+            
+            return product.save();
+        })
+        .then(result => {
+            console.log('updated product!!');
+            res.redirect('/admin/products');
+        })
+        .catch(err => {
+            console.log(err);
+        });
 };
 
 exports.postDeleteProducts = (req, res, next) => {
@@ -90,7 +97,7 @@ exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
     // req.user.getProducts()
-    Product.fetchAll()
+    Product.find()
         .then(products => {
             res.render('admin/products-list', {
                 prods: products,
