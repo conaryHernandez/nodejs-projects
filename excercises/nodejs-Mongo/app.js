@@ -4,7 +4,7 @@ const express = require('express');
 const expressHbs = require('express-handlebars');
 
 const app = express();
-const mongoose = require('mongoose');
+const mongoConnect = require('./utils/database').mongoConnect;
 
 /** EJS ENGINE
 * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
@@ -69,12 +69,6 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 
-mongoose
-	.connect('mongodb://conaryh:k9X9MpdWnfHYcqMC@cluster0-shard-00-00-nvbxl.mongodb.net:27017,cluster0-shard-00-01-nvbxl.mongodb.net:27017,cluster0-shard-00-02-nvbxl.mongodb.net:27017/nodejs-sandbox?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
-	.then(result => {
-		app.listen(3000);
-	})
-	.catch(err => {
-		console.log(err);
-	});
-
+mongoConnect(() => {
+	app.listen(3000);
+});

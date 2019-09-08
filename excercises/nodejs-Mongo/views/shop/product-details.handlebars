@@ -1,0 +1,13 @@
+<div class="centered">
+    <h1>{{ this.product.title }}</h1>
+    <hr>
+    <div>
+        <img src="{{this.product.imageUrl}}" alt="{{ this.product.title }}">
+    </div>
+    <h2>{{ this.product.price }}</h2>
+    <p>{{this.product.description}}</p>
+    <form action="/cart" method="POST">
+        <button class="btn">Add to Cart</button>
+        <input type="hidden" name="productId" value="{{ this.product._id }}"/>
+    </form>
+</div>
