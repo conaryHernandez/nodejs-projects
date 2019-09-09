@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Order = require('../models/orders');
 
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
@@ -102,8 +103,8 @@ exports.postCart = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-    req.user
-        .getOrders()
+    Order
+        .find({'user.userId': req.user._id })
         .then(orders => {
             console.log('orders', orders);
             res.render('shop/orders', {
@@ -119,9 +120,38 @@ exports.getOrders = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-    let fetchedCart = null;
-    req.user.addOrder()
+
+    req.user
+        .populate('cart.items.productId')
+        .execPopulate()
+        .then(user => {
+            let total = 0; 
+            const products = user.cart.items.map(i => {
+                console.log('i', i);
+
+                total += Number(i.quantity * i.productId.price)
+                
+                return {
+                    quantity: i.quantity,
+                    product: {...i.productId._doc}
+                };
+            });
+
+            console.log('total', total);
+            const order = new Order({
+                user: {
+                    name: req.user.name,
+                    userId: req.user,
+                },
+                products,
+                total
+            });
+            return order.save()
+        })
         .then(result => {
+                req.user.clearCart();
+        })
+        .then(() => {
             res.redirect('/orders');
         })
         .catch(err => console.log(err));

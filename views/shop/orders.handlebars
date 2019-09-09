@@ -3,12 +3,13 @@
         <ul>
             {{#each orders}}
             <li>
-                <h1>{{ this.user.name }}</h1>
+                <h1>Order# {{ this._id }}</h1>
                 <ul>
-                    {{#each this.items}}
-                    <li>{{ this.title }} ({{ this.quantity}}) </li>
+                    {{#each this.products}}
+                    <li>{{ this.product.title }} ({{ this.quantity}}) </li>
                     {{/each}}
                 </ul>
+                <h1>Total $ {{ this.total }}</h1>
             </li>
             {{/each}}
         </ul>
