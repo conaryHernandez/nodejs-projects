@@ -69,7 +69,8 @@ exports.getCart = (req, res, next) => {
                 pageTitle: 'Cart',
                 activeCart: true,
                 products,
-                hasProducts: products.length > 0
+                hasProducts: products.length > 0,
+                pageStyles: ['cart'],
             });
         })
         .catch(err => {
@@ -112,7 +113,8 @@ exports.getOrders = (req, res, next) => {
                 pageTitle: 'Orders',
                 activeOrders: true,
                 orders,
-                hasOrders: orders.length > 0
+                hasOrders: orders.length > 0,
+                pageStyles: ['orders']
             });
         })
         .catch(err => console.log(err)
