@@ -9,12 +9,12 @@ const requestHandler = (req, res) => {
         res.write('<head><title>Enter a Message</title></head>');
         res.write('<body><form action="/message" method="POST"><input name="message" type="text"></input><button type="submit">Send</button></form></body>')
         res.write('</html>');
-        return res.end();	
+        return res.end();
     }
-    
+
     if (url === '/message'  && method === 'POST') {
         const body = [];
-    
+
         req.on('data', (chunk) => {
             console.log('chunk', chunk);
             body.push(chunk);
@@ -22,21 +22,23 @@ const requestHandler = (req, res) => {
 
         // err is null is there is no error.
         return req.on('end', (err) => {
-            const parsedBody = Buffer.concat(body).toString(); // used strignbecause we know that we are receiving a string.
-    
+            console.log('body', body);
+
+            const parsedBody = Buffer(body.join('')).toString(); // used strignbecause we know that we are receiving a string.
+
             console.log('pasedBody', parsedBody);
-    
+
             const message = parsedBody.split('=')[1];
             // fs.writeFileSync('message.txt', message);
             fs.writeFile('message.txt', message, (err) => {
                 res.statusCode = 302;
                 res.setHeader('Location', '/');
-                return res.end();		
+                return res.end();
             });
         });
         // res.writeHead(302, {});
     }
-    
+
     res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
     res.write('<head><title>My First page</title></head>');
