@@ -3,15 +3,24 @@
     <ul class="main-header__item-list">
       <li class="main-header__item"><a class="{{#if activeShop }}active{{/if}}" href="/">Shop</a></li>
       <li class="main-header__item"><a class="{{#if activeProducts }}active{{/if}}" href="/products">Products</a></li>
+      {{#if isAuthenticated}}
       <li class="main-header__item"><a class="{{#if activeCart }}active{{/if}}" href="/cart">Cart</a></li>
       <li class="main-header__item"><a class="{{#if activeOrders }}active{{/if}}" href="/orders">Orders</a></li>
-      {{#if isAuthenticated}}
       <li class="main-header__item"><a class="{{#if activeAddProduct }}active{{/if}}" href="/admin/add-product">Add Product</a></li>
       <li class="main-header__item"><a class="{{#if activeAdminProduct }}active{{/if}}" href="/admin/products">Admin Product</a></li>
       {{/if}}
     </ul>
+
     <ul class="main-header__item-list">
+        {{#if isAuthenticated}}
+        <li class="main-header__item">
+          <form action="/logout" method="POST">
+            <button>Logout</button>
+          </form>       
+        </li>
+        {{else}}
         <li class="main-header__item"><a class="{{#if isLogin }}active{{/if}}" href="/login">Login</a></li>
+        {{/if}}        
     </ul>
   </nav>
 </header>

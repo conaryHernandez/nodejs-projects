@@ -6,7 +6,8 @@ exports.getProducts = (req, res, next) => {
     // class because "static" method
     Product.find()
         .then(products => {
-            console.log('products', products);
+            console.log('req.session.isLoggedIn', req.session.isLoggedIn);
+
             res.render('shop/product-list', {
                 prods: products,
                 pageTitle: 'Shop',
