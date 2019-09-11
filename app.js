@@ -62,6 +62,22 @@ app.use(session({
     // cookie: {}
 }));
 
+// retreiving mongoose object for individual request
+app.use((req, res, next) => {
+    if (!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
+        .then(user => {
+            req.user = user;
+            // res.setHeader('Set-Cookie', 'isLoggedIn=true');
+            next();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
+
 /**	ROUTES */
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

@@ -46,7 +46,7 @@ exports.postAddProducts = (req, res, next) => {
 
     console.log('req.session.user', req.session.user);
 
-    const product = new Product({ title, price, description, imageUrl, userId: req.session.user });
+    const product = new Product({ title, price, description, imageUrl, userId: req.session.user._id });
 
 
     product
