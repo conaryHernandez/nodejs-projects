@@ -5,6 +5,8 @@ const expressHbs = require('express-handlebars');
 
 const app = express();
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 /** EJS ENGINE
 * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
@@ -47,6 +49,11 @@ const User = require('./models/user');
 */
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+	secret: 'my secret',
+	resave: false,
+	saveUninitialized: false
+}));
 
 // first to run
 app.use((req, res, next) => {
