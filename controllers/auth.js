@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 exports.getLogin = (req, res, next) => {
@@ -21,15 +22,34 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-    User.findById('5d7534583129a25e94ac3ddb')
+    const { email, password } = req.body
+
+    User.findOne({ email })
         .then(user => {
-            req.session.user = user;
-            req.session.isLoggedIn = true;
-            // res.setHeader('Set-Cookie', 'isLoggedIn=true');
-            req.session.save(err => {
-                console.log(err);
-                res.redirect('/');
-            });
+            if (!user) {
+                console.log('user doesnt exists');
+
+                return res.redirect('/login');
+            }
+
+            bcrypt.compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        req.session.user = user;
+                        req.session.isLoggedIn = true;
+                        // res.setHeader('Set-Cookie', 'isLoggedIn=true');
+                        return req.session.save(err => {
+                            console.log(err);
+                            res.redirect('/');
+                        });
+                    }
+                    res.redirect('/login');
+                })
+                .catch(err => {
+                    console.log(err);
+
+                    res.redirect('/login');
+                });
         })
         .catch(err => {
             console.log(err);
@@ -46,17 +66,19 @@ exports.postSignup = (req, res, next) => {
 
                 return res.redirect('/signup');
             }
+            return bcrypt.hash(password, 12)
+                .then(hashPassword => {
+                    const user = new User({
+                        email,
+                        password: hashPassword,
+                        cart: { items: [] }
+                    });
 
-            const user = new User({
-                email,
-                password,
-                cart: { items: [] }
-            });
-
-            return user.save();
-        })
-        .then(result => {
-            res.redirect('/login');
+                    return user.save();
+                })
+                .then(result => {
+                    res.redirect('/login');
+                });
         })
         .catch(err => console.log(err));
 };
