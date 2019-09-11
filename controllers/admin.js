@@ -2,10 +2,6 @@ const mongodb = require('mongodb');
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
-
-    if (!req.session.isLoggedIn) {
-        return res.redirect('/login');
-    }
     // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
     res.render('admin/add-product', {
         pageTitle: 'Add Product',
