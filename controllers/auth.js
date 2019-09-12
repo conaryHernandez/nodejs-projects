@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 const transporter = nodemailer.createTransport(sendGridTransport({
     auth: {
-        api_key: ''
+        api_key: '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'
     }
 }));
 
@@ -38,6 +38,22 @@ exports.getReset = (req, res, next) => {
         pageStyles: ['forms', 'auth'],
         errorMessage: req.flash('error')
     });
+};
+
+exports.getNewPassword = (req, res, next) => {
+    const token = req.params.token;
+
+    User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+        .then(user => {
+            res.render('auth/new-password', {
+                path: '/new-password',
+                pageTitle: 'New Password',
+                pageStyles: ['forms', 'auth'],
+                errorMessage: req.flash('error'),
+                userId: user._id.toString()
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 exports.postLogin = (req, res, next) => {
