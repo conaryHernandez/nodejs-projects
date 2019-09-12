@@ -8,10 +8,12 @@ const app = express();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 const store = new MongoDBStore({
     uri: MONGODB_URI,
     collection: 'sessions'
 });
+const csrfProtection = csrf();
 
 /** EJS ENGINE
  * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
@@ -61,6 +63,7 @@ app.use(session({
     store,
     // cookie: {}
 }));
+app.use(csrfProtection);
 
 // retreiving mongoose object for individual request
 app.use((req, res, next) => {
@@ -76,6 +79,12 @@ app.use((req, res, next) => {
         .catch(err => {
             console.log(err);
         });
+});
+
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
 });
 
 /**	ROUTES */

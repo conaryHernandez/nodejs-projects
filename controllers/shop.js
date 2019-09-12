@@ -14,7 +14,6 @@ exports.getProducts = (req, res, next) => {
                 path: '/',
                 hasProducts: products.length > 0,
                 activeProducts: true,
-                isAuthenticated: req.session.isLoggedIn
             }); // express method
         })
         .catch(err => {
@@ -32,7 +31,6 @@ exports.getProduct = (req, res, next) => {
                 pageTitle: product.title,
                 path: '/products',
                 activeProducts: true,
-                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => {
@@ -51,7 +49,6 @@ exports.getIndex = (req, res, next) => {
                 path: '/',
                 hasProducts: products.length > 0,
                 activeShop: true,
-                isAuthenticated: req.session.isLoggedIn
             }); // express method
         })
         .catch(err => {
@@ -75,7 +72,6 @@ exports.getCart = (req, res, next) => {
                 products,
                 hasProducts: products.length > 0,
                 pageStyles: ['cart'],
-                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => {
@@ -120,7 +116,6 @@ exports.getOrders = (req, res, next) => {
                 orders,
                 hasOrders: orders.length > 0,
                 pageStyles: ['orders'],
-                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
