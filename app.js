@@ -9,7 +9,6 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
-const flash = require('connect-flash');
 const store = new MongoDBStore({
     uri: MONGODB_URI,
     collection: 'sessions'
@@ -65,7 +64,6 @@ app.use(session({
     // cookie: {}
 }));
 app.use(csrfProtection);
-app.use(flash());
 
 // retreiving mongoose object for individual request
 app.use((req, res, next) => {

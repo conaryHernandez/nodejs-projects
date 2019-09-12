@@ -8,6 +8,7 @@ exports.getAddProduct = (req, res, next) => {
         path: '/admin/add-product',
         pageStyles: ['forms', 'product'],
         activeAddProduct: true,
+        isAuthenticated: req.session.isLoggedIn
     });
 };
 
@@ -32,7 +33,7 @@ exports.getEditProduct = (req, res, next) => {
                 activeAddProduct: true,
                 editing: true,
                 product,
-
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => {
@@ -109,7 +110,7 @@ exports.getProducts = (req, res, next) => {
                 path: '/admin/products',
                 hasProducts: products.length > 0,
                 activeAdminProduct: true,
-
+                isAuthenticated: req.session.isLoggedIn
             }); // express method
         })
         .catch(err => {

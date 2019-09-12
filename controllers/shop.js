@@ -142,7 +142,7 @@ exports.postOrder = (req, res, next) => {
             console.log('total', total);
             const order = new Order({
                 user: {
-                    email: req.user.email,
+                    name: req.user.name,
                     userId: req.user,
                 },
                 products,
