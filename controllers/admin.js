@@ -65,16 +65,18 @@ exports.postEditProducts = (req, res, next) => {
     Product
         .findById(productId)
         .then(product => {
+            if (product.userId.toString() !== req.user._id.toString()) {
+                return res.redirect('/');
+            }
             product.title = title;
             product.description = description;
             product.imageUrl = imageUrl;
             product.price = price;
 
-            return product.save();
-        })
-        .then(result => {
-            console.log('updated product!!');
-            res.redirect('/admin/products');
+            return product.save().then(result => {
+                console.log('updated product!!');
+                res.redirect('/admin/products');
+            });
         })
         .catch(err => {
             console.log(err);
@@ -84,7 +86,7 @@ exports.postEditProducts = (req, res, next) => {
 exports.postDeleteProducts = (req, res, next) => {
     const { productId } = req.body;
 
-    Product.findByIdAndRemove(productId)
+    Product.deleteOne({ _id: productId, userId: req.user._id })
         .then(result => {
             console.log('Product detroyed');
             res.redirect('/admin/products');
@@ -99,15 +101,20 @@ exports.getProducts = (req, res, next) => {
     // class because "static" method
     // req.session.user.getProducts()
     Product
-        .find()
+        .findOne({ userId: req.user._id })
         // .select('title price -_id')
         // .populate('UserId', 'name')
         .then(products => {
+            let listOfProducts = products;
+
+            if (!products) {
+                listOfProducts = 0
+            }
             res.render('admin/products-list', {
                 prods: products,
                 pageTitle: 'Admin Products',
                 path: '/admin/products',
-                hasProducts: products.length > 0,
+                hasProducts: listOfProducts.length > 0,
                 activeAdminProduct: true,
 
             }); // express method

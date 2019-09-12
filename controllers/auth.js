@@ -50,7 +50,8 @@ exports.getNewPassword = (req, res, next) => {
                 pageTitle: 'New Password',
                 pageStyles: ['forms', 'auth'],
                 errorMessage: req.flash('error'),
-                userId: user._id.toString()
+                userId: user._id.toString(),
+                passwordToken: token,
             });
         })
         .catch(err => console.log(err));
@@ -171,4 +172,31 @@ exports.postReset = (req, res, next) => {
             })
             .catch(err => console.log(err));
     })
+};
+
+exports.postNewPassword = (req, res, next) => {
+    const { newPassword, userId, passwordToken } = req.body;
+    let resetUser = null;
+
+    User.findOne({
+            resetToken: passwordToken,
+            resetTokenExpiration: { $gt: Data.now() },
+            _id: userId,
+        })
+        .then(user => {
+            resetUser = user;
+
+            return bcrypt.hash(newPassword, 12);
+        })
+        .then(hashedPassword => {
+            resetUser.password = hashedPassword;
+            resetUser.resetToken = null;
+            resetUser.resetTokenExpiration = undefined;
+
+            return resetUser.save();
+        })
+        .then(result => {
+            res.redirect('/login');
+        })
+        .catch(err => console.log(err));
 };
