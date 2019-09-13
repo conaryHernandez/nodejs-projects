@@ -28,7 +28,8 @@ exports.getSignup = (req, res, next) => {
         pageTitle: 'Signup',
         pageStyles: ['forms', 'auth'],
         isSignup: true,
-        errorMessage: req.flash('error')
+        errorMessage: req.flash('error'),
+        validationErrors: []
     });
 };
 
@@ -62,12 +63,13 @@ exports.postLogin = (req, res, next) => {
     const { email, password } = req.body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render('auth/login', {
+        return res.status(422).render('auth/login', {
             path: '/login',
             pageTitle: 'Login',
             isLogin: true,
             pageStyles: ['forms', 'auth'],
-            errorMessage: errors.array()[0].msg
+            errorMessage: errors.array()[0].msg,
+            oldInput: { email, password },
         });
     }
 
@@ -106,16 +108,24 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.postSignup = (req, res, next) => {
-    const { email, password } = req.body;
+    const { email, password, confirmPassword } = req.body;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
+        const validationErrors = {};
+        for (let x = 0; x < errors.array().length; x++) {
+            validationErrors[errors.array()[x].param] = errors.array()[x].param;
+        }
+
+        console.log('validationErrors', validationErrors);
         return res.status(422).render('auth/signup', {
             path: '/signup',
             pageTitle: 'Signup',
             pageStyles: ['forms', 'auth'],
             isSignup: true,
-            errorMessage: errors.array()[0].msg
+            errorMessage: errors.array()[0].msg,
+            oldInput: { email, password, confirmPassword },
+            validationErrors
         });
     }
 

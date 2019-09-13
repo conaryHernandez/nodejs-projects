@@ -5,15 +5,30 @@
     <form class="login-form" action="/signup" method="POST" novalidate>
         <div class="form-control">
             <label for="email">E-Mail</label>
-            <input type="email" name="email" id="email">
+            <input type="email"
+                name="email"
+                id="email"
+                value="{{ oldInput.email }}"
+                class="{{#if validationErrors.email }}invalid{{/if}}"
+            >
         </div>
         <div class="form-control">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password"
+                name="password"
+                id="password"
+                value="{{ oldInput.password }}"
+                class="{{#if validationErrors.password }}invalid{{/if}}"
+            >
         </div>
         <div class="form-control">
             <label for="confirmPassword">Confirm Password</label>
-            <input type="password" name="confirmPassword" id="confirmPassword">
+            <input type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value="{{ oldInput.confirmPassword }}"
+                class="{{#if validationErrors.confirmPassword }}invalid{{/if}}"
+            >
         </div>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <button class="btn" type="submit">Login</button>
