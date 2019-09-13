@@ -96,7 +96,7 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.postSignup = (req, res, next) => {
-    const { email, password, confirmPassword } = req.body;
+    const { email, password } = req.body;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -109,34 +109,25 @@ exports.postSignup = (req, res, next) => {
         });
     }
 
-    User.findOne({ email: email })
-        .then(userDoc => {
-            if (userDoc) {
-                console.log('user already exists');
-                req.flash('error', 'Email already Exists.');
 
-                return res.redirect('/signup');
-            }
-            return bcrypt.hash(password, 12)
-                .then(hashPassword => {
-                    const user = new User({
-                        email,
-                        password: hashPassword,
-                        cart: { items: [] }
-                    });
+    bcrypt.hash(password, 12)
+        .then(hashPassword => {
+            const user = new User({
+                email,
+                password: hashPassword,
+                cart: { items: [] }
+            });
 
-                    return user.save();
-                })
-                .then(result => {
-                    res.redirect('/login');
-                    transporter.sendMail({
-                        to: email,
-                        from: 'shop@nodejssandbox.com',
-                        subject: 'Signup succeeded!',
-                        html: '<h1>You are a part of our family!</h1>'
-                    });
-                })
-                .catch(err => console.log(err));
+            return user.save();
+        })
+        .then(result => {
+            res.redirect('/login');
+            transporter.sendMail({
+                to: email,
+                from: 'shop@nodejssandbox.com',
+                subject: 'Signup succeeded!',
+                html: '<h1>You are a part of our family!</h1>'
+            });
         })
         .catch(err => console.log(err));
 };
