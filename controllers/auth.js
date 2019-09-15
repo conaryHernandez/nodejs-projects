@@ -198,23 +198,23 @@ exports.postReset = (req, res, next) => {
 };
 
 exports.postNewPassword = (req, res, next) => {
-    const { newPassword, userId, passwordToken } = req.body;
+    const { confirmPassword, userId, passwordToken } = req.body;
     let resetUser = null;
 
     User.findOne({
             resetToken: passwordToken,
-            resetTokenExpiration: { $gt: Data.now() },
+            resetTokenExpiration: { $gt: Date.now() },
             _id: userId,
         })
         .then(user => {
             resetUser = user;
 
-            return bcrypt.hash(newPassword, 12);
+            return bcrypt.hash(confirmPassword, 12);
         })
         .then(hashedPassword => {
             resetUser.password = hashedPassword;
             resetUser.resetToken = null;
-            resetUser.resetTokenExpiration = undefined;
+            resetUser.resetTokenExpiration = null;
 
             return resetUser.save();
         })
