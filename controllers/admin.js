@@ -1,5 +1,6 @@
 const mongodb = require('mongodb');
 const Product = require('../models/product');
+const { validationResult } = require('express-validator');
 
 exports.getAddProduct = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
@@ -8,6 +9,14 @@ exports.getAddProduct = (req, res, next) => {
         path: '/admin/add-product',
         pageStyles: ['forms', 'product'],
         activeAddProduct: true,
+        oldInput: {
+            title: '',
+            imageUrl: '',
+            price: '',
+            description: '',
+        },
+        validationErrors: [],
+        errorMessage: null,
     });
 };
 
@@ -32,7 +41,6 @@ exports.getEditProduct = (req, res, next) => {
                 activeAddProduct: true,
                 editing: true,
                 product,
-
             });
         })
         .catch(err => {
@@ -42,10 +50,32 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postAddProducts = (req, res, next) => {
     const { title, imageUrl, description, price } = req.body;
-
-    console.log('req.session.user', req.session.user);
+    const validationErrors = {};
+    const errors = validationResult(req);
 
     const product = new Product({ title, price, description, imageUrl, userId: req.session.user._id });
+
+    if (!errors.isEmpty()) {
+        for (let x = 0; x < errors.array().length; x++) {
+            validationErrors[errors.array()[x].param] = errors.array()[x].param;
+        }
+
+        return res.status(422).render('admin/add-product', {
+            pageTitle: 'Add Product',
+            path: '/admin/add-product',
+            pageStyles: ['forms', 'product'],
+            activeAddProduct: true,
+            editing: true,
+            oldInput: {
+                title,
+                imageUrl,
+                price,
+                description,
+            },
+            errorMessage: errors.array()[0].msg,
+            validationErrors,
+        });
+    }
 
 
     product
@@ -101,7 +131,7 @@ exports.getProducts = (req, res, next) => {
     // class because "static" method
     // req.session.user.getProducts()
     Product
-        .findOne({ userId: req.user._id })
+        .find({ userId: req.user._id })
         // .select('title price -_id')
         // .populate('UserId', 'name')
         .then(products => {

@@ -1,23 +1,44 @@
+{{#if errorMessage}}
+    <div class="user-message user-message--error">{{errorMessage}}</div>
+{{/if}}
 <form class="product-form" action="/admin/edit-product" method="POST">
     <div class="form-control">
         <label for="title">Title</label>
-        <input type="text" name="title" id="title" value="{{ product.title }}">
+        <input type="text"
+            name="title"
+            id="title"
+            value="{{ product.title }}"
+            class="{{#if validationErrors.title }}invalid{{/if}}"
+        >
     </div>
     <div class="form-control">
         <label for="imageUrl">Img Url</label>
-        <input type="text" name="imageUrl" id="imageUrl" value="{{ product.imageUrl }}">
+        <input type="text"
+            name="imageUrl"
+            id="imageUrl"
+            value="{{ product.imageUrl }}"
+            class="{{#if validationErrors.imageUrl }}invalid{{/if}}"
+        >
     </div>
 
     <div class="form-control">
         <label for="price">Price</label>
-        <input type="number" name="price" id="price" step="0.01" value="{{ product.price }}">
+        <input type="number"
+            name="price"
+            id="price"
+            step="0.01" value="{{ product.price }}"
+            class="{{#if validationErrors.price }}invalid{{/if}}"
+        >
     </div>
 
     <div class="form-control">
         <label for="description">Description</label>
-        <textarea type="text" name="description" id="description" rows="5">
-            {{ product.description }}
-        </textarea>
+        <textarea type="text"
+            name="description"
+            id="description"
+            rows="5"
+            class="{{#if validationErrors.description }}invalid{{/if}}"  
+        >{{ product.description }}</textarea>
     </div>
 
     <input type="hidden" name="productId" value="{{ product._id }}">

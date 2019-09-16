@@ -17,10 +17,12 @@ router.get('/reset/:token', authController.getNewPassword);
 router.post('/login', [
         body('email')
         .isEmail()
-        .withMessage('Please enter a valid email address.'),
+        .withMessage('Please enter a valid email address.')
+        .normalizeEmail(),
         body('password', 'Password has to be valid.')
         .isLength({ min: 5 })
         .isAlphanumeric()
+        .trim()
     ],
     authController.postLogin
 );
@@ -40,10 +42,12 @@ router.post('/signup', [check('email')
                     );
                 }
             });
-        }),
+        })
+        .normalizeEmail(),
         body('password', 'Password must have at leaste 5 characters and letters and numbers')
-        .isLength({ min: 5 }).isAlphanumeric(),
-        body('confirmPassword').custom((value, { req }) => {
+        .isLength({ min: 5 }).isAlphanumeric()
+        .trim(),
+        body('confirmPassword').trim().custom((value, { req }) => {
             if (value !== req.body.password) {
                 throw new Error('Passwords have to match');
             }

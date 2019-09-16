@@ -18,7 +18,12 @@ exports.getLogin = (req, res, next) => {
         pageTitle: 'Login',
         isLogin: true,
         pageStyles: ['forms', 'auth'],
-        errorMessage: req.flash('error')
+        errorMessage: req.flash('error'),
+        oldInput: {
+            email: '',
+            password: '',
+        },
+        validationErrors: []
     });
 };
 
@@ -29,6 +34,11 @@ exports.getSignup = (req, res, next) => {
         pageStyles: ['forms', 'auth'],
         isSignup: true,
         errorMessage: req.flash('error'),
+        oldInput: {
+            email: '',
+            password: '',
+            confirmPassword: '',
+        },
         validationErrors: []
     });
 };
@@ -62,7 +72,13 @@ exports.getNewPassword = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
     const { email, password } = req.body
     const errors = validationResult(req);
+    const validationErrors = {};
+
     if (!errors.isEmpty()) {
+        for (let x = 0; x < errors.array().length; x++) {
+            validationErrors[errors.array()[x].param] = errors.array()[x].param;
+        }
+
         return res.status(422).render('auth/login', {
             path: '/login',
             pageTitle: 'Login',
@@ -70,6 +86,7 @@ exports.postLogin = (req, res, next) => {
             pageStyles: ['forms', 'auth'],
             errorMessage: errors.array()[0].msg,
             oldInput: { email, password },
+            validationErrors,
         });
     }
 
@@ -92,9 +109,16 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/');
                         });
                     }
-                    req.flash('error', 'Invalid email or password.');
 
-                    res.redirect('/login');
+                    return res.status(422).render('auth/login', {
+                        path: '/login',
+                        pageTitle: 'Login',
+                        isLogin: true,
+                        pageStyles: ['forms', 'auth'],
+                        errorMessage: 'Invalid email or password.',
+                        oldInput: { email, password },
+                        validationErrors,
+                    });
                 })
                 .catch(err => {
                     console.log(err);
@@ -117,7 +141,6 @@ exports.postSignup = (req, res, next) => {
             validationErrors[errors.array()[x].param] = errors.array()[x].param;
         }
 
-        console.log('validationErrors', validationErrors);
         return res.status(422).render('auth/signup', {
             path: '/signup',
             pageTitle: 'Signup',
