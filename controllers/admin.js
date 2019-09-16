@@ -41,6 +41,7 @@ exports.getEditProduct = (req, res, next) => {
                 activeAddProduct: true,
                 editing: true,
                 product,
+                validationErrors: []
             });
         })
         .catch(err => {
@@ -91,6 +92,31 @@ exports.postAddProducts = (req, res, next) => {
 
 exports.postEditProducts = (req, res, next) => {
     const { productId, description, imageUrl, price, title } = req.body;
+    const validationErrors = {};
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        for (let x = 0; x < errors.array().length; x++) {
+            validationErrors[errors.array()[x].param] = errors.array()[x].param;
+        }
+
+        return res.status(422).render('admin/edit-product', {
+            pageTitle: 'Edit Product',
+            path: '/admin/edit-product',
+            pageStyles: ['forms', 'product'],
+            activeAddProduct: true,
+            editing: true,
+            product: {
+                title,
+                imageUrl,
+                price,
+                description,
+                _id: productId,
+            },
+            errorMessage: errors.array()[0].msg,
+            validationErrors,
+        });
+    }
 
     Product
         .findById(productId)

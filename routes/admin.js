@@ -33,7 +33,7 @@ router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 
 router.post('/edit-product', [
     body('title', 'Please enter a valid title')
-    .isAlphanumeric()
+    .isString()
     .isLength({ min: 3 })
     .trim(),
     body('imageUrl', 'Please enter a valid Image url')
