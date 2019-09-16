@@ -69,6 +69,7 @@ app.use(flash());
 
 // retreiving mongoose object for individual request
 app.use((req, res, next) => {
+    console.log(req.session);
     if (!req.session.user) {
         return next();
     }
