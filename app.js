@@ -1,5 +1,6 @@
 const path = require('path');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const express = require('express');
 const expressHbs = require('express-handlebars');
 const MONGODB_URI = 'mongodb://conaryh:k9X9MpdWnfHYcqMC@cluster0-shard-00-00-nvbxl.mongodb.net:27017,cluster0-shard-00-01-nvbxl.mongodb.net:27017,cluster0-shard-00-02-nvbxl.mongodb.net:27017/nodejs-sandbox?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&w=majority';
@@ -15,7 +16,26 @@ const store = new MongoDBStore({
     collection: 'sessions'
 });
 const csrfProtection = csrf();
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString() + '-' + file.originalname);
+    },
+});
 
+const fileFilter = (req, file, cb) => {
+    if (
+        file.mimetype === 'image/png' ||
+        file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/jpeg'
+    ) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
 /** EJS ENGINE
  * app.set('view engine', 'ejs'); // setting global configuration, doesnt work for all template engine
  * app.set('views', 'views');
@@ -56,6 +76,7 @@ const User = require('./models/user');
  * Urlencoded in the end call next but before that it parses the body, does not parse all type of bodies
  */
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({ storage: fileStorage, fileFilter }).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'my secret',

@@ -18,8 +18,6 @@ router.post('/add-product', [
         .isString()
         .isLength({ min: 3 })
         .trim(),
-        body('imageUrl', 'Please enter a valid Image url')
-        .isURL(),
         body('price', 'Please enter a valid Price')
         .isFloat(),
         body('description', 'Please enter a valid description')
@@ -36,8 +34,6 @@ router.post('/edit-product', [
     .isString()
     .isLength({ min: 3 })
     .trim(),
-    body('imageUrl', 'Please enter a valid Image url')
-    .isURL(),
     body('price', 'Please enter a valid Price')
     .isFloat(),
     body('description', 'Please enter a valid description')
