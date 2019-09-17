@@ -67,9 +67,14 @@ app.use(session({
 app.use(csrfProtection);
 app.use(flash());
 
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
 // retreiving mongoose object for individual request
 app.use((req, res, next) => {
-    console.log(req.session);
     if (!req.session.user) {
         return next();
     }
@@ -87,12 +92,6 @@ app.use((req, res, next) => {
         });
 });
 
-app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.session.isLoggedIn;
-    res.locals.csrfToken = req.csrfToken();
-    next();
-});
-
 /**	ROUTES */
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -102,6 +101,16 @@ app.use('/error', errorController.get500);
 
 /**	404 PAGE */
 app.use(errorController.get404);
+
+app.use((error, req, res, next) => {
+    // res.status(error.httpStatusCode);
+    // res.redirect('/error');
+    res.status(500).render('500', {
+        pageTitle: 'Error',
+        path: '/error',
+        isAuthenticated: req.session.isLoggedIn
+    });
+});
 
 
 mongoose
