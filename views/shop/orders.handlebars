@@ -3,10 +3,10 @@
         <ul class="orders">
             {{#each orders}}
             <li class="orders__item">
-                <h1>Order# {{ this._id }}</h1>
+                <h1>Order# {{ this._id }} <a href="/orders/{{_id }}">Invoice</a></h1>
                 <ul class="orders__products">
                     {{#each this.products}}
-                    <li class="orders__products-item">{{ this.product.title }} ({{ this.quantity}}) - <a href="/orders/{{../_id }}">Invoice</a> </li>
+                    <li class="orders__products-item">{{ this.product.title }} ({{ this.quantity}}) </li>
                     {{/each}}
                 </ul>
                 <h1>Total $ {{ this.total }}</h1>

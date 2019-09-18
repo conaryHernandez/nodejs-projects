@@ -1,5 +1,6 @@
 const mongodb = require('mongodb');
 const Product = require('../models/product');
+const fileHelper = require('../utils/file');
 const { validationResult } = require('express-validator');
 
 exports.getAddProduct = (req, res, next) => {
@@ -161,6 +162,7 @@ exports.postEditProducts = (req, res, next) => {
             product.title = title;
             product.description = description;
             if (image) {
+                fileHelper.deleteFile(product.imageUrl);
                 product.imageUrl = image.path;
             }
             product.price = price;
@@ -180,9 +182,15 @@ exports.postEditProducts = (req, res, next) => {
 };
 
 exports.postDeleteProducts = (req, res, next) => {
-    const { productId } = req.body;
-
-    Product.deleteOne({ _id: productId, userId: req.user._id })
+    const prodId = req.body.productId;
+    Product.findById(prodId)
+        .then(product => {
+            if (!product) {
+                return next(new Error('Product not found.'));
+            }
+            fileHelper.deleteFile(product.imageUrl);
+            return Product.deleteOne({ _id: prodId, userId: req.user._id });
+        })
         .then(result => {
             console.log('Product detroyed');
             res.redirect('/admin/products');
