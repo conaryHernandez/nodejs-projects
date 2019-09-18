@@ -201,17 +201,27 @@ exports.getInvoice = (req, res, next) => {
     const invoiceName = `invoice-${orderId}.pdf`;
     const invoicePath = path.join('data', 'invoices', invoiceName);
 
-    fs.readFile(invoicePath, (err, data) => {
-        if (err) {
-            return next(err);
-        }
+    Order.findById({ orderId })
+        .then(order => {
+            if (!order) {
+                return next(
+                    new Error('No Order Found'));
+            }
 
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader(
-            'Content-Disposition',
-            'inline; filename="' + invoiceName + '"'
-        );
-        res.send(data);
-    });
+            if (order.user.userId.toString() !== req.user._id.toString()) {
+                return next(new Error('Not Authorized'));
+            }
 
+            const file = fs.createReadStream(invoicePath);
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader(
+                'Content-Disposition',
+                'inline; filename="' + invoiceName + '"'
+            );
+            file.pipe(res);
+        })
+        .catch(err => {
+            next(err);
+        });
 };
