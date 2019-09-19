@@ -5,6 +5,8 @@ const PDFDocument = require('pdfkit');
 const Product = require('../models/product');
 const Order = require('../models/orders');
 
+const ITEMS_PER_PAGE = 2;
+
 exports.getProducts = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     // class because "static" method
@@ -52,8 +54,19 @@ exports.getProduct = (req, res, next) => {
 
 exports.getIndex = (req, res, next) => {
     //	res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    // class because "static" method
+    const page = req.query.page;
+    let totalItems = null;
+
     Product.find()
+        .count()
+        .then(numProducts => {
+            totalItems = numProducts;
+
+            return Product
+                .find()
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+        })
         .then(products => {
             res.render('shop/index', {
                 prods: products,
@@ -61,6 +74,12 @@ exports.getIndex = (req, res, next) => {
                 path: '/',
                 hasProducts: products.length > 0,
                 activeShop: true,
+                totalProducts: totalItems,
+                hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+                hasPreviousPage: page > 1,
+                nextPage: page + 1,
+                hasPreviousPage: page - 1,
+                lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
             }); // express method
         })
         .catch(err => {
