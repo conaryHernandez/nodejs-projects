@@ -70,7 +70,8 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 const errorController = require('./controllers/404');
 const User = require('./models/user');
-
+const shopController = require('./controllers/shop');
+const isAuth = require('./middleware/is-auth');
 
 /* parsing the body
  * Urlencoded in the end call next but before that it parses the body, does not parse all type of bodies
@@ -87,12 +88,10 @@ app.use(session({
     store,
     // cookie: {}
 }));
-app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
-    res.locals.csrfToken = req.csrfToken();
     next();
 });
 
@@ -116,6 +115,15 @@ app.use((req, res, next) => {
 });
 
 /**	ROUTES */
+app.post('/create-order', isAuth, shopController.postOrder);
+
+app.use(csrfProtection);
+
+app.use((req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);

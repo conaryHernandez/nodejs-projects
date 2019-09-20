@@ -10,8 +10,34 @@
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <div class="centered">
             <h2>Total: {{totalSum}}</h2>
-        </form>
         </div>
+        <div>
+            <!--<form action="/create-order" method="POST">
+                <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="pk_test_4ZooxBAYGSChNQDZahy7Nj54008xtmzRdr"
+                    data-amount="{{totalSumStripe}}"
+                    data-name="Your Order"
+                    data-description="All the items you ordered"
+                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                    data-locale="auto"
+                    data-currency="usd">
+                </script>
+            </form>-->
+            <button id="order-btn" class="btn">ORDER</button>
+
+            <script src="https://js.stripe.com/v3/"></script>
+            <script>
+                var stripe = Stripe('');
+                var orderBtn = document.getElementById('order-btn');
+                orderBtn.addEventListener('click', function() {
+                    stripe.redirectToCheckout({
+                        sessionId: '{{sessionId}}'
+                    });
+                });
+            </script>
+        </div>
+
     {{else}}
         <h1>No products in cart.</h1>
     {{/if}}
