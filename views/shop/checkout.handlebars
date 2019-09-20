@@ -1,0 +1,18 @@
+<main>
+    {{#if hasProducts }}
+        <ul class="cart__item-list">
+        {{#each products}}
+            <li class="cart__item">
+                <p>{{this.productId.title}} ({{ this.quantity }})</p>
+            </li>
+        {{/each}}
+        </ul>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <div class="centered">
+            <h2>Total: {{totalSum}}</h2>
+        </form>
+        </div>
+    {{else}}
+        <h1>No products in cart.</h1>
+    {{/if}}
+</main>
