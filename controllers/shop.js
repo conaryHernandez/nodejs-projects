@@ -197,7 +197,7 @@ exports.getOrders = (req, res, next) => {
         });
 };
 
-/*exports.getCheckout = (req, res, next) => {
+exports.getCheckout = (req, res, next) => {
     req.user
         .populate('cart.items.productId')
         .execPopulate()
@@ -226,7 +226,7 @@ exports.getOrders = (req, res, next) => {
 
             return next(error);
         });
-};*/
+};
 
 exports.getCheckoutSuccess = (req, res, next) => {
     let totalSum = 0;
@@ -264,7 +264,8 @@ exports.getCheckoutSuccess = (req, res, next) => {
         });
 };
 
-exports.getCheckout = (req, res, next) => {
+// new stripe method
+/* exports.getCheckout = (req, res, next) => {
     let products; // THIS WAS MOVED - had to put it here, to make it accessible by all then() blocks.
     let total = 0; // THIS WAS MOVED - had to put it here, to make it accessible by all then() blocks.
     req.user
@@ -305,7 +306,7 @@ exports.getCheckout = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(error);
         });
-};
+}; */
 
 exports.postOrder = (req, res, next) => {
     const token = req.body.stripeToken;
