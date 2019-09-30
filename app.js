@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const express = require('express');
 const expressHbs = require('express-handlebars');
-const MONGODB_URI = 'mongodb://conaryh:k9X9MpdWnfHYcqMC@cluster0-shard-00-00-nvbxl.mongodb.net:27017,cluster0-shard-00-01-nvbxl.mongodb.net:27017,cluster0-shard-00-02-nvbxl.mongodb.net:27017/nodejs-sandbox?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&w=majority';
+require('dotenv').config()
 
 const app = express();
 const mongoose = require('mongoose');
@@ -12,7 +12,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const store = new MongoDBStore({
-    uri: MONGODB_URI,
+    uri: process.env.MONGODB_URI,
     collection: 'sessions'
 });
 const csrfProtection = csrf();
@@ -146,7 +146,7 @@ app.use((error, req, res, next) => {
 
 
 mongoose
-    .connect(MONGODB_URI, { useNewUrlParser: true })
+    .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
     .then(result => {
         app.listen(3000);
     })
