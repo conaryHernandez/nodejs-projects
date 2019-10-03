@@ -7,7 +7,7 @@ const User = require('../models/user');
 
 const transporter = nodemailer.createTransport(sendGridTransport({
     auth: {
-        api_key: ''
+        api_key: process.env.EMAIL_KEY
     }
 }));
 
@@ -188,47 +188,45 @@ exports.postLogout = (req, res, next) => {
     });
 };
 
-exports.postReset = (req, res, next) => {
-    crypto.randomBytes(32, (err, buffer) => {
+exports.postReset = async(req, res, next) => {
+    crypto.randomBytes(32, async(err, buffer) => {
         if (err) {
-            console.log(err);
             return res.redirect('/reset');
         }
 
         const token = buffer.toString('hex');
+        const user = await User.findOne({ email: req.body.email });
 
-        User.findOne({ email: req.body.email })
-            .then(user => {
-                if (!user) {
-                    req.flash('error', 'No account with this email was found!');
+        if (!user) {
+            req.flash('error', 'No account with this email was found!');
 
-                    return res.redirect('/reset');
-                }
+            return res.redirect('/reset');
+        }
 
-                user.resetToken = token;
-                user.resetTokenExpiration = Date.now() + 3600000;
-
-                return user.save();
-            })
-            .then(result => {
-                res.redirect('/');
-                transporter.sendMail({
-                    to: req.body.email,
-                    from: 'shop@nodejssandbox.com',
-                    subject: 'Password Reset',
-                    html: `
-                        <p>You requested a password reset</p>
-                        <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
-                    `
-                });
-            })
-            .catch(err => {
-                const error = new Error(err);
-
-                error.httpStatusCode = 500;
-
-                return next(error);
+        try {
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now() + 3600000;
+    
+            await user.save();
+    
+            transporter.sendMail({
+                to: req.body.email,
+                from: 'shop@nodejssandbox.com',
+                subject: 'Password Reset',
+                html: `
+                    <p>You requested a password reset</p>
+                    <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+                `
             });
+    
+            res.redirect('/');            
+        } catch (err) {
+            const error = new Error(err);
+
+            error.httpStatusCode = 500;
+
+            return next(error);
+        }
     })
 };
 

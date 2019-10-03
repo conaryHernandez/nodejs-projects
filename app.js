@@ -38,8 +38,8 @@ const store = new MongoDBStore({
 const csrfProtection = csrf();
 
 // SSL
-const privateKey = fs.readFileSync('server.key');
-const certificate = fs.readFileSync('server.cert');
+// const privateKey = fs.readFileSync('server.key');
+// const certificate = fs.readFileSync('server.cert');
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -94,9 +94,11 @@ app.use(morgan('combined', {stream: accessLogStream}));
 
 // CONTROLLERS
 const errorController = require('./controllers/404');
-const User = require('./models/user');
 const shopController = require('./controllers/shop');
 const isAuth = require('./middleware/is-auth');
+
+// MODELS
+const User = require('./models/user');
 
 // UTILS middleware
 app.use(bodyParser.urlencoded({ extended: false }));
