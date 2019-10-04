@@ -8,4 +8,6 @@ Pending:
 -Set morgan according to env
 -Set env variables properly
 -Set SSL
+-change reset password uri
+-File Storage for images in an outside service
  
