@@ -164,13 +164,20 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.postCart = (req, res, next) => {
     const { productId } = req.body;
 
-    Product.findById(productId)
+    return Product.findById(productId)
         .then(product => {
             return req.user.addToCart(product);
         })
         .then(result => {
             console.log('add to cart result', result);
             res.redirect('/cart');
+        })
+        .catch(err => {
+            const error = new Error(err);
+
+            error.httpStatusCode = 500;
+
+            return next(error);
         });
 };
 
