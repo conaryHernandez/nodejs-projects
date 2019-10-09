@@ -166,6 +166,14 @@ exports.postCart = (req, res, next) => {
 
     return Product.findById(productId)
         .then(product => {
+            if (!product) {
+                const error = new Error('No product found!');
+
+                error.statusCode = 404;
+
+                throw error;
+            }
+
             return req.user.addToCart(product);
         })
         .then(result => {

@@ -1,6 +1,7 @@
 const shopController = require('../shop');
 const mongoose = require('mongoose');
 const User = require('../../models/user');
+const Product = require('../../models/product');
 
 describe('shop controller', () => {
   beforeAll(async() => {
@@ -38,6 +39,11 @@ describe('shop controller', () => {
   	const res = {
   		redirect: jest.fn(),
   	};
+    Product.findById = jest.fn().mockResolvedValue(() => {
+      return {
+        _id: '5c0f66b979af55031b34727a',
+      }
+    });
 
   	shopController.postCart(req, res, () => {}).then(() => {
   		expect(req.user.addToCart).toBeCalled();
