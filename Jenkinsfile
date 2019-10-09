@@ -1,6 +1,6 @@
 node {
    stage('Prepare environment') {
-        git branch: 'master', url: 'https://github.com/conaryHernandez/nodejs-sandbox.git'
+        git branch: 'staging', url: 'https://github.com/conaryHernandez/nodejs-sandbox.git'
         sh 'npm install'
     }
     stage('Run tests')  {
