@@ -17,5 +17,6 @@ node {
     // sh 'ssh middletieruser@104.131.108.63 "mv /var/www/html/$JOB_NAME/* /var/www/html/$JOB_NAME"'
     // sh 'ssh middletieruser@104.131.108.63 rm -rf /var/www/html/$JOB_NAME/'
     sh 'ssh middletieruser@104.131.108.63 ls /var/www/html/ -a'
+    sh 'pm2 start app.js'
   }
 }
