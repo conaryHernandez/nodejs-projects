@@ -6,4 +6,5 @@ This is a work in progress.
 Pending:
 -Set SSL
 -File Storage for images in an outside service
+-CI test
  
