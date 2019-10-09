@@ -1,10 +1,6 @@
 <main>
-  <h1>Welcome to my store
-    {{#>myName name="Conary"}}
-      Testing partials
-    {{/myName}}
-  </h1>
-  <p>List of all the products (Aprox.{{calculation 50}})</p>
+  <h1>Welcome to my store</h1>
+  <p>List of all the products (Aprox.{{totalProducts}})</p>
   <div class="grid">
     {{#if hasProducts }}
       {{#each prods}}
