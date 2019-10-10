@@ -3,9 +3,6 @@ node {
       git branch: 'staging', url: 'https://github.com/conaryHernandez/nodejs-sandbox.git'
       sh 'npm install'
   }
-  stage('Run tests')  {
-      sh 'npm run test'
-  }
   stage('Deploy') {
     sh 'ssh middletieruser@104.131.108.63 echo $JOB_NAME'
     sh 'ssh middletieruser@104.131.108.63 rm -rf /var/www/html/$JOB_NAME'
