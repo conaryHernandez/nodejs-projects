@@ -177,7 +177,6 @@ exports.postCart = (req, res, next) => {
             return req.user.addToCart(product);
         })
         .then(result => {
-            console.log('add to cart result', result);
             res.redirect('/cart');
         })
         .catch(err => {
