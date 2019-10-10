@@ -5,7 +5,7 @@ const Product = require('../../models/product');
 
 describe('shop controller', () => {
   beforeAll(async() => {
-      const MONGODB_URI = `mongodb://conaryh:k9X9MpdWnfHYcqMC@cluster0-shard-00-00-nvbxl.mongodb.net:27017,cluster0-shard-00-01-nvbxl.mongodb.net:27017,cluster0-shard-00-02-nvbxl.mongodb.net:27017/test-nodejs-sandbox?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&w=majority`;
+      const MONGODB_URI = `mongodb://conaryh:O0uDbWzvy9luBLw3@cluster0-shard-00-00-nvbxl.mongodb.net:27017,cluster0-shard-00-01-nvbxl.mongodb.net:27017,cluster0-shard-00-02-nvbxl.mongodb.net:27017/test-nodejs-sandbox?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&w=majority`;
 
       connection = await mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true});
       const user = new User({
