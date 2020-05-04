@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./server/index.js",
+    "server": "nodemon ./server/index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server \" "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^3.5.1",
+    "cookie-session": "^2.0.0-rc.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.4",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}

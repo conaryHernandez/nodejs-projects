@@ -1,0 +1,29 @@
+div.wrapper.intro
+	- const upDog =  dog.toUpperCase();
+
+	h3#main-title Hello word my name is #{upDog}
+	p my dog is #{dog}
+	img.dog(src="dog.jpg" alt=`our image ${dog}`)
+
+h2 
+	| hello
+	span  inside this 
+
+
+(req, res, next) => {
+	//const data = { name: 'conary', age: 10 };
+  //res.json(data);
+  //res.json(req.query);
+  //res.send('Hey! It works!');
+  res.render('hello', {
+  	title: 'homepage',
+  	name: 'conary',
+  	dog: req.query.dog
+  });
+});
+
+router.get('/reverse/:name', (req, res) => {
+	const reverse = [...req.params.name].reverse().join('');
+
+  res.send(reverse);
+});

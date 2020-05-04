@@ -1,0 +1,27 @@
+/*----------------portapapeles------------------*/
+https://accounts.google.com/signin/oauth/oauthchooseaccount?
+client_id=134053084385-tnukaa5tptdn6kne7doitfpj4pb3r6rq.apps.googleusercontent.com
+&as=PFvKzzL3gW-YZqXelTwDpw&destination=http%3A%2F%2Flocalhost%3A5000
+&approval_state=!ChRzdURJWDR6cF9DYlpscXlXQVNiNxIfUTZHZHJkMTZDbU1TVUU3MWpGWk5XazFqeV9KckN4Yw%E2%88%99AF-3PDcAAAAAXmVZe9_dfVFpgmFoWH3Y_Dclck-FJ9jc
+&oauthgdpr=1&xsrfsig=ChkAeAh8T1prZbl4MHQubzxDoNZ00L-yGFzHEg5hcHByb3ZhbF9zdGF0ZRILZGVzdGluYXRpb24SBXNvYWN1Eg9vYXV0aHJpc2t5c2NvcGU
+&flowName=GeneralOAuthFlow
+
+
+//https://accounts.google.com/o/oauth2/v2/auth?
+//response_type=code&  asking for the code
+//redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Fauth%2Fgoogle%2Fcallback&   //the addres the user should be redirect
+//scope=profile%20email&client_id=134053084385-tnukaa5tptdn6kne7doitfpj4pb3r6rq.apps.googleusercontent.com
+
+
+//le decimo que use cookies en nuestra aplicacion
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000, //how long the cookie can exist
+    keys: [keys.cookieKey] ///sirve para encriptar nuestra cookie para que no se pueda cmabiar manualmente la cookie del id
+  })
+);
+
+
+require('./models/User');
+
+mongoose.connect(keys.mongoURI);
