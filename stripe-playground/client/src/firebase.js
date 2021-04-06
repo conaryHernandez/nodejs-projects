@@ -3,16 +3,16 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyAUzu622-f23fl0LX1rf6nxzzy0MP5ERLA',
-  authDomain: 'stripe-js-course.firebaseapp.com',
-  databaseURL: 'https://stripe-js-course.firebaseio.com',
-  projectId: 'stripe-js-course',
-  storageBucket: 'stripe-js-course.appspot.com',
-  messagingSenderId: '84918842518',
-  appId: '1:84918842518:web:d23dedb546fd2e8ee63eb7',
+  apiKey: 'AIzaSyBzo-OdZkKXUx5Ns_TgzgiZvpDUVMKMkjs',
+  authDomain: 'food-22d6b.firebaseapp.com',
+  databaseURL: 'https://food-22d6b.firebaseio.com',
+  projectId: 'food-22d6b',
+  storageBucket: 'food-22d6b.appspot.com',
+  messagingSenderId: '400378343507',
+  appId: '1:400378343507:web:b377ecc970c290578816a6',
 };
 
-firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig);
 
 export const db = firebase.firestore();
 export const auth = firebase.auth();
