@@ -10,6 +10,9 @@ export async function fetchFromAPI(endpointURL, opts) {
   const { method, body } = { method: 'POST', body: null, ...opts };
 
   const user = auth.currentUser;
+
+  console.log('auth', auth);
+
   const token = user && (await user.getIdToken());
 
   const res = await fetch(`${API}/${endpointURL}`, {

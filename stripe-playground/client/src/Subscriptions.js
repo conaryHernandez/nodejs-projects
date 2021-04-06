@@ -7,23 +7,22 @@ import { db } from './firebase';
 import { SignIn, SignOut } from './Customers';
 
 function UserData(props) {
-
   const [data, setData] = useState({});
 
   // Subscribe to the user's data in Firestore
-  useEffect(
-    () => {
-      const unsubscribe = db.collection('users').doc(props.user.uid).onSnapshot(doc => setData(doc.data()) )
-      return () => unsubscribe()
-    },
-    [props.user]
-  )
+  useEffect(() => {
+    const unsubscribe = db
+      .collection('users')
+      .doc(props.user.uid)
+      .onSnapshot((doc) => setData(doc.data()));
+    return () => unsubscribe();
+  }, [props.user]);
 
   return (
-    <pre>
+    <p>
       Stripe Customer ID: {data.stripeCustomerId} <br />
       Subscriptions: {JSON.stringify(data.activePlans || [])}
-    </pre>
+    </p>
   );
 }
 
@@ -39,7 +38,7 @@ function SubscribeToPlan(props) {
   // Get current subscriptions on mount
   useEffect(() => {
     getSubscriptions();
-  }, [user]);
+  }, []);
 
   // Fetch current subscriptions from the API
   const getSubscriptions = async () => {
@@ -77,6 +76,8 @@ function SubscribeToPlan(props) {
       return;
     }
 
+    console.log('paymentMethod', paymentMethod);
+
     // Create Subscription on the Server
     const subscription = await fetchFromAPI('subscriptions', {
       body: {
@@ -86,7 +87,7 @@ function SubscribeToPlan(props) {
     });
 
     // The subscription contains an invoice
-    // If the invoice's payment succeeded then you're good, 
+    // If the invoice's payment succeeded then you're good,
     // otherwise, the payment intent must be confirmed
 
     const { latest_invoice } = subscription;
@@ -136,23 +137,25 @@ function SubscribeToPlan(props) {
           <button
             className={
               'btn ' +
-              (plan === 'plan_HC2o83JbeowZnP'
+              (plan === 'price_1IdH2EAUG4nIzjc3LK03rSnW'
                 ? 'btn-primary'
                 : 'btn-outline-primary')
             }
-            onClick={() => setPlan('plan_HC2o83JbeowZnP')}>
-            Choose Monthly $25/m
+            onClick={() => setPlan('price_1IdH2EAUG4nIzjc3LK03rSnW')}
+          >
+            Choose Monthly $5/m
           </button>
 
           <button
             className={
               'btn ' +
-              (plan === 'plan_HD6rlaovzAiM7B'
+              (plan === 'price_1IdMMHAUG4nIzjc323Szy2ri'
                 ? 'btn-primary'
                 : 'btn-outline-primary')
             }
-            onClick={() => setPlan('plan_HD6rlaovzAiM7B')}>
-            Choose Quarterly $50/q
+            onClick={() => setPlan('price_1IdMMHAUG4nIzjc323Szy2ri')}
+          >
+            Choose Quarterly $8/q
           </button>
 
           <p>
@@ -189,7 +192,8 @@ function SubscribeToPlan(props) {
                 <button
                   className="btn btn-sm btn-danger"
                   onClick={() => cancel(sub.id)}
-                  disabled={loading}>
+                  disabled={loading}
+                >
                   Cancel
                 </button>
               </div>

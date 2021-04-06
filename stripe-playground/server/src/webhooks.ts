@@ -1,5 +1,7 @@
 import { stripe } from './';
 import Stripe from 'stripe';
+import { db } from './firebase';
+import { firestore } from 'firebase-admin';
 
 /**
  * Business logic for specific webhook event types
@@ -10,6 +12,42 @@ const webhookHandlers = {
   },
   'payment_intent.payment_failed': async (data: Stripe.PaymentIntent) => {
     // Add your business logic here
+  },
+  'customer.subscription.deleted': async (data: Stripe.Subscription) => {
+    const customer = (await stripe.customers.retrieve(
+      data.customer as string
+    )) as Stripe.Customer;
+    const userId = customer.metadata.firebaseUID;
+    const userRef = db.collection('users').doc(userId);
+
+    await userRef.update({
+      activePlans: firestore.FieldValue.arrayRemove(data.items.data[0].id),
+    });
+  },
+  'customer.subscription.created': async (data: Stripe.Subscription) => {
+    const customer = (await stripe.customers.retrieve(
+      data.customer as string
+    )) as Stripe.Customer;
+    const userId = customer.metadata.firebaseUID;
+    const userRef = db.collection('users').doc(userId);
+
+    await userRef.update({
+      activePlans: firestore.FieldValue.arrayUnion(data.items.data[0].id),
+    });
+  },
+  'invoice.payment_succeeded': async (data: Stripe.Invoice) => {
+    // Add your business logic here
+  },
+  'invoice.payment_failed': async (data: Stripe.Invoice) => {
+    const customer = (await stripe.customers.retrieve(
+      data.customer as string
+    )) as Stripe.Customer;
+
+    const userSnapshot = await db
+      .collection('users')
+      .doc(customer.metadata.firebaseUID)
+      .get();
+    await userSnapshot.ref.update({ status: 'PAST_DUE' });
   },
 };
 
